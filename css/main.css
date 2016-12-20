@@ -1,0 +1,94 @@
+@charset "utf-8";
+      html, body {
+         overflow: hidden;
+         width: 100%;
+         height: 100%;
+         margin: 0;
+         padding: 0;
+		 background:black;
+		 font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
+		 font-weight:bold;
+		 color:white;		 
+		 letter-spacing:0.15em;
+		 line-height:1.225em;
+		 font-size:16px;
+      }
+	  
+	  .text-outline{
+	  	text-shadow: 1px 1px black, 0px 1px black, 1px 0px black, -1px -1px black, -1px 0px black, 0px -1px black, 1px -1px black, -1px 1px black;
+	  }
+	
+	.wrapper{
+		display:block;
+		position:fixed;
+		width:100%;
+		height:100%;
+		left:0;
+		top:0;
+	}
+	
+	.center-wrap{
+		display:block;
+		position:absolute;
+		width:1280px;
+		min-height:100%;
+		background-color:rgba(40,0,0,1);
+		left:50%;
+		top:0;
+		transform:translateX(-50%);
+	}
+	
+	.side-border{
+		position:absolute;
+		display:none;
+		width:44px;
+		height:100%;
+		background-image:url(../imgs/temp_border.gif);
+		background-position:center top;
+		background-repeat:repeat-y;
+		background-size:auto;
+		top:0
+	}
+	
+	.side-border.left{
+			left:0;
+	}
+	.side-border.right{
+			right:0;
+	}
+	
+	.header{
+		position:relative;
+		display:block;
+		height:2em;
+		line-height:1.5em;
+		background:rgba(153,153,153,0.35);	
+	}
+
+	.main{
+		display:block;
+		position:relative;	
+	}
+	
+	.game{
+		position:relative;
+		display:block;
+		height:720px;
+		background:white;
+	}
+	.game canvas{
+		 width: 100%;
+         height: 100%;
+         touch-action: none;
+	}
+	
+	.chat, .menu{
+		display:inline-block;
+		width:50%;
+		height:120px;
+	}
+	
+	.chat{
+		background:lightgrey;	
+	}
+	

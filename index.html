@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Legends Alpha 0.0.1</title>
+</head>
+<link rel="stylesheet" type="text/css" href="css/main.css">
+
+<script src="./js/babylon.custom.js"></script>
+<script src="./js/lob.js"></script>
+<body>
+<div class='main-wrap'>
+	<div class='center-wrap'>
+    	<div class='header'></div>
+        <div class='main'>
+        <div class='game' id='game-wrap'></div>
+        <div class='chat'></div>
+        <div class='menu'></div>
+        </div>
+        
+        <div class='foot'></div>
+    
+    <div class='side-border left'></div>
+    <div class='side-border right'></div>
+    </div>    
+</div>
+<script>
+ document.addEventListener("DOMContentLoaded", function(e) {
+    LEGENDS = new lob();
+	console.log(LEGENDS);
+  });
+</script>
+</body>
+</html>
