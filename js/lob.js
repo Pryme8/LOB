@@ -5,7 +5,7 @@
 
 lob = function(){
 	this.presets = {};
-	this.materials = {Rock_A:[]};
+	this.materials = {Rock:[],Rock2Dirt:[]};
 	this._engine = null;
 	this._scene = null;
 	this._camera = null;
@@ -38,18 +38,27 @@ lob.prototype._startEngine = function(){
 	this._loader = new BABYLON.AssetsManager(scene);
 	
 	var bHex_load = this._loader.addMeshTask("base_hex", "", "assets/models/", "hex.obj");
-	this.materials['Rock_A'].push(new BABYLON.StandardMaterial("Rock_A", scene));
-	this.materials['Rock_A'][0].diffuseTexture = new BABYLON.Texture("assets/textures/Rock_A.png", scene);
-	this.materials['Rock_A'][0].bumpTexture = new BABYLON.Texture("assets/textures/Rock_A-Normal.png", scene);
-	this.materials['Rock_A'][0].invertNormalMapY = true;
-	this.materials['Rock_A'][0].specularColor = new BABYLON.Color3(0.25, 0.25, 0.3);
-	this.materials['Rock_A'][0].specularPower = 32;
-	this.materials['Rock_A'].push(new BABYLON.StandardMaterial("Rock_A2", scene));
-	this.materials['Rock_A'][1].diffuseTexture = new BABYLON.Texture("assets/textures/Rock_A2.png", scene);
-	this.materials['Rock_A'][1].bumpTexture = new BABYLON.Texture("assets/textures/Rock_A2-Normal.png", scene);
-	this.materials['Rock_A'][1].invertNormalMapY = true;
-	this.materials['Rock_A'][1].specularColor = new BABYLON.Color3(0.25, 0.25, 0.3);
-	this.materials['Rock_A'][1].specularPower = 32;
+	
+	this.materials['Rock'].push(new BABYLON.StandardMaterial("Rock0", scene));
+	this.materials['Rock'][0].diffuseTexture = new BABYLON.Texture("assets/textures/Rock0.png", scene);
+	this.materials['Rock'][0].bumpTexture = new BABYLON.Texture("assets/textures/Rock0-Normal.png", scene);
+	this.materials['Rock'][0].invertNormalMapY = true;
+	this.materials['Rock'][0].specularColor = new BABYLON.Color3(0.25, 0.25, 0.3);
+	this.materials['Rock'][0].specularPower = 32;
+	
+	this.materials['Rock'].push(new BABYLON.StandardMaterial("Rock1", scene));
+	this.materials['Rock'][1].diffuseTexture = new BABYLON.Texture("assets/textures/Rock1.png", scene);
+	this.materials['Rock'][1].bumpTexture = new BABYLON.Texture("assets/textures/Rock1-Normal.png", scene);
+	this.materials['Rock'][1].invertNormalMapY = true;
+	this.materials['Rock'][1].specularColor = new BABYLON.Color3(0.25, 0.25, 0.3);
+	this.materials['Rock'][1].specularPower = 32;
+	
+	this.materials['Rock2Dirt'].push(new BABYLON.StandardMaterial("Rock2Dirt", scene));
+	this.materials['Rock2Dirt'][0].diffuseTexture = new BABYLON.Texture("assets/textures/Rock2Dirt0.png", scene);
+	this.materials['Rock2Dirt'][0].bumpTexture = new BABYLON.Texture("assets/textures/Rock2Dirt0-Normal.png", scene);
+	this.materials['Rock2Dirt'][0].invertNormalMapY = true;
+	this.materials['Rock2Dirt'][0].specularColor = new BABYLON.Color3(0.25, 0.25, 0.3);
+	this.materials['Rock2Dirt'][0].specularPower = 32;
 	
 	var self = this;
 	bHex_load.onSuccess = function(t){
@@ -58,7 +67,26 @@ lob.prototype._startEngine = function(){
 		self._buildPresetHexs();
 		
 		var test = new lob.LEVEL(self);
-		console.log(test ,test.hexs[20][0][20]);
+		self._canvas.addEventListener("click", function (e) {  
+  		 	var p = scene.pick(scene.pointerX, scene.pointerY);
+			p = p.pickedMesh;
+			console.log(p);
+			if(p){
+				var oldP = p;
+				var p = p._pID;				
+				
+				p.y+=1;
+				
+				console.log(p);
+				var hex = test.hexs[p.x][p.y][p.z] = new lob.HEX('Rock2Dirt', self);
+				hex._instance._pID = {x:p.x, y:p.y, z:p.z};
+				hex = hex._instance;					
+				hex.position = oldP.position.clone();
+				hex.position.y += 120;
+				hex.setEnabled(1);				
+				
+			};
+		});
 	};
 
 	
@@ -86,21 +114,32 @@ lob.prototype._startEngine = function(){
       window.addEventListener("resize", function () {
          engine.resize();
       });
+	  
+	 	
 	
 	
 	
 };
 
 lob.prototype._buildPresetHexs = function(){
-	this.presets['Rock_A'] = [];	
-	for (var i = 0; i<this.materials['Rock_A'].length; i++){			
-		var nP = this.presets['hex'].clone('Rock_A'+i);
-		nP.material = this.materials['Rock_A'][i];
+	var hexList = ['Rock', 'Rock2Dirt']
+	for(var p = 0; p<hexList.length; p++){		
+	var ps = hexList[p];
+	this.presets[ps] = [];	
+	console.log(this.presets);
+	for (var i = 0; i<this.materials[ps].length; i++){	
+		console.log(ps);	
+		var nP = this.presets['hex'].clone(ps+i);
+		
+		nP.material = this.materials[ps][i];
 		nP.setEnabled(0);
-		this.presets['Rock_A'].push(nP);
+		this.presets[ps].push(nP);
 	}
 	
-	console.log(this.presets['Rock_A']);
+	
+	}
+	
+	
 };
 
 
@@ -117,7 +156,8 @@ lob.LEVEL = function(parent){
 lob.LEVEL.prototype._createBase = function(){
 	for(var x =0; x<64; x++){
 		for(var z =0; z<64; z++){
-			this.hexs[x][0][z] = new lob.HEX('Rock_A', this.parent);
+			var hex = this.hexs[x][0][z] = new lob.HEX('Rock', this.parent);
+			hex._instance._pID = {x:x, y:0, z:z};
 		}
 	}
 };
@@ -132,7 +172,7 @@ lob.LEVEL.prototype._buildBase = function(){
 			hex = hex._instance;					
 				hex.position.x = x*310;
 				hex.position.z = z*360;	
-				//hex.setEnabled(1);	
+				hex.setEnabled(1);	
 				if(x % 2 == 0){/*EVEN*/}else{ hex.position.z += 180}
 				//if(z % 2 == 0){/*EVEN*/}else{ newHex.position.z += 20}
 		}
@@ -143,8 +183,9 @@ lob.HEX = function(type, engine){
 	this._type = type;
 	this._engine = engine;
 	var r = Math.floor(Math.random()*(engine.presets[type].length));
-	console.log(r);
-	this._instance = engine.presets['Rock_A'][r].createInstance(type);
+	//console.log(r);
+	this._instance = engine.presets[type][0].createInstance(type);
+	this._instance.setEnabled(0);	
 	//console.log(this._instance);
 
 	return this;
